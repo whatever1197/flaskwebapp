@@ -27,14 +27,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different username.')
 
-# Übernommen aus den Beispielen
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Request Password Reset')
-
-
+# Eigenentwicklung
 class New3DPrint(FlaskForm):
     name = StringField('Filename', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
@@ -42,8 +35,7 @@ class New3DPrint(FlaskForm):
     quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-
-
+# Eigenentwicklung
 class Edit3DPrint(FlaskForm):
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
     quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
