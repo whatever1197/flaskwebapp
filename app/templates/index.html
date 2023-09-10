@@ -2,7 +2,7 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Hello there!</h1>
+    <h2>Hello there!</h2>
     <p>
         Welcome on my 3D-Print Management Page.
         Here you'll find my 3D-Prints (downloaded or created by myself) rated on their quality or in other words useability.
@@ -13,6 +13,9 @@
     {% endif %}
     {% if current_user.is_anonymous %}
     You have to login to edit.
+    {% endif %}
+    {% if current_user.is_authenticated %}
+    <a class="btn btn-default" href="{{ url_for('new3d') }}" role="button" style="margin-bottom: 10px; float:right;">New 3D-Print</a>
     {% endif %}
     {% for model in models %}
         {% include '_model.html' %}
