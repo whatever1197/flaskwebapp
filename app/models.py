@@ -1,5 +1,5 @@
 # Übernommen aus den Beispielen
-from app import db, app
+from app import db, app, login
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -16,6 +16,10 @@ class Users(UserMixin, db.Model):
     API_Token = db.Column(db.String(32), unique=True)
     API_Expiration = db.Column(db.DateTime)
     Models = db.relationship('Models', backref='User', lazy='dynamic')
+
+    @login.user_loader
+    def load_user(id):
+        return Users.query.get(int(id))
 
     # Übernommen aus den Beispielen
     def set_password(self, password):

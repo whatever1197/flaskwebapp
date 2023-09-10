@@ -9,10 +9,9 @@ from app.models import Users, Models
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
-@login_required
 def index():
-    posts = Models.query.order_by(Models.timestamp.desc())
-    return render_template('index.html', title='Home')
+    models = Models.query.all() # order_by(Models.timestamp.desc())
+    return render_template('index.html', title='Home', models=models)
 
 
 @app.route('/login', methods=['GET', 'POST'])
