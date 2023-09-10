@@ -89,6 +89,7 @@ class Models(db.Model):
             'Description': self.Description,
             'Status': self.Status,
             'Quality': self.Quality,
+            'Timestamp': self.Timestamp,
             'User': self.User.Username
         }
 

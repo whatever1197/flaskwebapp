@@ -55,19 +55,29 @@ def register():
 def new3d():
     form = New3DPrintForm()
     if form.validate_on_submit():
-        model = Models(Filename=form.titel.data, Content=form.content.data, Timestamp=datetime.utcnow(), User_ID=current_user.ID_User, Model_ID=id)
+        model = Models(Name=form.name.data, Description=form.description.data, Timestamp=datetime.utcnow(), User_ID=current_user.ID_User, Quality=form.quality.data, Status=form.status.data)
         db.session.add(model)
         db.session.commit()
-        return redirect(url_for('index', id=id))
+        return redirect(url_for('index'))
 
-@app.route('/edit3d', methods=['GET', 'POST'])
+    return render_template("new3d.html", title="New 3D-Model", form=form)
+
+@app.route('/edit3d/<id>', methods=['GET', 'POST'])
 @login_required
-def edit3d():
+def edit3d(id):
     form = Edit3DPrintForm()
-    model = Models.query.filter_by(ID_Models=id).first()
+    model = Models.query.filter_by(ID_Model=id).first()
     if form.validate_on_submit():
         model.Name = form.name.data
+        model.Description = form.description.data
         model.Status = form.status.data
         model.Quality = form.quality.data
         db.session.commit()
+
         return redirect(url_for('index', id=id))
+
+    form.name.data = model.Name
+    form.description.data = model.Description
+    form.status.data = model.Status
+    form.quality.data = model.Quality
+    return render_template("edit3d.html", model=model, form=form)

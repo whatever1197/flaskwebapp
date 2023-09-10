@@ -1,10 +1,9 @@
 # Übernommen aus den Beispielen
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
+from wtforms import StringField, PasswordField, SubmitField, \
     TextAreaField, SelectField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
-    Length
-from app.models import Users
+from wtforms.validators import ValidationError, DataRequired, EqualTo
+from app.models import Users, Models
 
 # Übernommen aus den Beispielen
 class LoginForm(FlaskForm):
@@ -34,8 +33,17 @@ class New3DPrintForm(FlaskForm):
     quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+    # Übernommen aus den Beispielen
+    def validate_name(self, name):
+        model = Models.query.filter_by(Name=name.data).first()
+        if model is not None:
+            raise ValidationError('Please use a different filename.')
+
+
 # Eigenentwicklung
 class Edit3DPrintForm(FlaskForm):
+    name = StringField('Filename', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
     quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Update')
