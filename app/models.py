@@ -1,90 +1,95 @@
-from datetime import datetime
-from hashlib import md5
-from time import time
-from flask_login import UserMixin
+# Übernommen aus den Beispielen
+from app import db, app
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
-from app import app, db, login
+from flask_login import UserMixin
+import base64
+from hashlib import md5
+
+import os
 
 
-followers = db.Table(
-    'followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
-)
+class Users(UserMixin, db.Model):
+    ID_User = db.Column(db.Integer, primary_key=True)
+    Username = db.Column(db.String(64), index=True, unique=True)
+    Password = db.Column(db.String(128))
+    API_Token = db.Column(db.String(32), unique=True)
+    API_Expiration = db.Column(db.DateTime)
+    Models = db.relationship('Models', backref='User', lazy='dynamic')
 
-
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
-    about_me = db.Column(db.String(140))
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    followed = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
+    # Übernommen aus den Beispielen
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.Password = generate_password_hash(password)
 
+    # Übernommen aus den Beispielen
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self.Password, password)
+    
+    def all_models(self):
+        models = Models.query.all()
+        return models
+   
+    def json_one(self):
+        returndata = {
+            'ID_User': self.ID_User,
+            'Username': self.Username,
+            'Models': self.Models.count(),
+        }
 
-    def avatar(self, size):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+        return(returndata)
 
-    def follow(self, user):
-        if not self.is_following(user):
-            self.followed.append(user)
+    # Übernommen aus den Beispielen
+    def json_all():
+        users = Users.query.all()
+        returndata = {
+            'users': [user.json_one() for user in users]
+        }
 
-    def unfollow(self, user):
-        if self.is_following(user):
-            self.followed.remove(user)
+        return(returndata)
+    
+    # Übernommen aus den Beispielen
+    def get_token(self):
+        now = datetime.utcnow()
+        self.API_Token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.API_Expiration = now + timedelta(days=1)
+        db.session.add(self)
+        db.session.commit()
+        return self.API_Token
 
-    def is_following(self, user):
-        return self.followed.filter(
-            followers.c.followed_id == user.id).count() > 0
-
-    def followed_posts(self):
-        followed = Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)).filter(
-                followers.c.follower_id == self.id)
-        own = Post.query.filter_by(user_id=self.id)
-        return followed.union(own).order_by(Post.timestamp.desc())
-
-    def get_reset_password_token(self, expires_in=600):
-        return jwt.encode(
-            {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256')
-
+    # Übernommen aus den Beispielen
     @staticmethod
-    def verify_reset_password_token(token):
-        try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['reset_password']
-        except:
-            return
-        return User.query.get(id)
+    def check_token(token):
+        user = Users.query.filter_by(API_Token=token).first()
+        if user is None or user.API_Expiration < datetime.utcnow():
+            return None
+        return user
 
 
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
 
+class Models(db.Model):
+    ID_3DModel = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(64))
+    Description = db.Column(db.String(1024))
+    Status = db.Column(db.String(16))
+    Quality = db.Column(db.String(16))
+    User_ID = db.Column(db.Integer, db.ForeignKey(Users.ID_User))
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    def json_one(self):
+        returndata = {
+            'ID_3DModel': self.ID_ToDo,
+            'Name': self.Name,
+            'Description': self.Description,
+            'Status': self.Status,
+            'Quality': self.Quality,
+            'User': self.User.Username
+        }
 
-    def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return(returndata)
+
+    def json_all():
+        todos = ToDos.query.all()
+        returndata = {
+            'todos': [todo.json_one() for todo in todos]
+        }
+
+        return(returndata)
