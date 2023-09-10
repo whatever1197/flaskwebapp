@@ -67,7 +67,7 @@ class Users(UserMixin, db.Model):
 
 
 class Models(db.Model):
-    ID_3DModel = db.Column(db.Integer, primary_key=True)
+    ID_Model = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(64))
     Description = db.Column(db.String(1024))
     Status = db.Column(db.String(16))
@@ -76,7 +76,7 @@ class Models(db.Model):
 
     def json_one(self):
         returndata = {
-            'ID_3DModel': self.ID_ToDo,
+            'ID_Model': self.ID_Model,
             'Name': self.Name,
             'Description': self.Description,
             'Status': self.Status,
@@ -87,9 +87,9 @@ class Models(db.Model):
         return(returndata)
 
     def json_all():
-        todos = ToDos.query.all()
+        models = Models.query.all()
         returndata = {
-            'todos': [todo.json_one() for todo in todos]
+            'models': [model.json_one() for model in models]
         }
 
         return(returndata)
