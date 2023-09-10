@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<p>Die API kann von jedem mit einem gültigen API-Key verwendet werden.</p>
+
+<table class="table table-hover">
+    <tr>
+        <td>User: https://3dprint-mgmt.azurewebsites.net/api/user/ID</td>
+    </tr>
+    <tr>
+        <td>Users: https://3dprint-mgmt.azurewebsites.net/api/users</td>
+    </tr>
+    <tr>
+        <td>Model: https://3dprint-mgmt.azurewebsites.net/api/model/ID</td>
+    </tr>
+    <tr>
+        <td>Models: https://3dprint-mgmt.azurewebsites.net/api/models</td>
+    </tr>
+</table>
+<p>
+    Aktuelles Token: {{current_user.API_Token}}<br>
+    Läuft ab: {{current_user.API_Expiration}}
+</p>
+<a class="btn btn-default" href="{{ url_for('generateapikey') }}" role="button">Generate</a>
+{% endblock %}

@@ -81,3 +81,16 @@ def edit3d(id):
     form.status.data = model.Status
     form.quality.data = model.Quality
     return render_template("edit3d.html", model=model, form=form)
+
+# Eigenentwicklung
+@app.route("/generateapikey", methods=['GET', 'POST'])
+@login_required
+def generateapikey():
+    Users.get_token(current_user)
+    return redirect(url_for('api'))
+
+
+@app.route("/api", methods=['GET', 'POST'])
+@login_required
+def api():
+    return render_template("api.html", title="API")
