@@ -83,6 +83,15 @@ def edit3d(id):
     return render_template("edit3d.html", model=model, form=form)
 
 # Eigenentwicklung
+@app.route("/delete/<id>", methods=['GET', 'POST'])
+@login_required
+def delete(id):
+    delete = Models.query.filter_by(ID_Model=id).first()
+    db.session.delete(delete)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+# Eigenentwicklung
 @app.route("/generateapikey", methods=['GET', 'POST'])
 @login_required
 def generateapikey():

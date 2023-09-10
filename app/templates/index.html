@@ -47,10 +47,10 @@
                     {{model.Quality}}
                 </td>
                 <td>
-                    <a href="{{ url_for('edit', id=item.ID_ToDo) }}">Edit</a><br>
+                    <a href="{{ url_for('edit', id=item.ID_Model) }}">Edit</a><br>
                 </td>
                 <td>
-                    <a href="{{ url_for('delete', id=item.ID_ToDo) }}">Delete</a>
+                    <a href="{{ url_for('delete', id=item.ID_Model) }}">Delete</a>
                 </td>
             </tr>
         {% endfor %}
