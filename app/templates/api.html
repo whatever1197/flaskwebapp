@@ -19,8 +19,8 @@
     </tr>
 </table>
 <p>
-    Aktuelles Token: {{current_user.API_Token}}<br>
-    Läuft ab: {{current_user.API_Expiration}}
+    Current token: {{current_user.API_Token}}<br>
+    Expires in (UTC): {{current_user.API_Expiration}}
 </p>
 <a class="btn btn-default" href="{{ url_for('generateapikey') }}" role="button">Generate</a>
 {% endblock %}
