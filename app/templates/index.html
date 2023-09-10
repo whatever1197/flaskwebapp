@@ -4,7 +4,7 @@
 {% block app_content %}
     <h2>Hello there!</h2>
     <p>
-        Welcome on my 3D-Print Management Page.
+        Welcome on my 3D-Print Management page.
         Here you'll find my 3D-Prints (downloaded or created by myself) rated on their quality or in other words useability.
     </p>
     {% if form %}
@@ -47,10 +47,10 @@
                     {{model.Quality}}
                 </td>
                 <td>
-                    <a href="{{ url_for('edit', id=item.ID_Model) }}">Edit</a><br>
+                    <a href="{{ url_for('edit3d', id=model.ID_Model) }}">Edit</a><br>
                 </td>
                 <td>
-                    <a href="{{ url_for('delete', id=item.ID_Model) }}">Delete</a>
+                    <a href="{{ url_for('delete3d', id=model.ID_Model) }}">Delete</a>
                 </td>
             </tr>
         {% endfor %}
