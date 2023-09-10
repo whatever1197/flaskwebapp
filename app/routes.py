@@ -3,22 +3,15 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, New3DPrint
-from app.models import User, Post
-
-
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
+from app.forms import LoginForm, RegistrationForm, New3DPrintForm, Edit3DPrintForm
+from app.models import Users, Models
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    posts = Post.query.order_by(Post.timestamp.desc())
+    posts = Models.query.order_by(Models.timestamp.desc())
     return render_template('index.html', title='Home')
 
 
@@ -28,7 +21,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = Users.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
@@ -39,6 +32,28 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+
+@app.route('/new3d', methods=['GET', 'POST'])
+@login_required
+def new3d():
+    form = New3DPrintForm()
+    if form.validate_on_submit():
+        model = Models(Filename=form.titel.data, Content=form.content.data, Timestamp=datetime.utcnow(), User_ID=current_user.ID_User, Model_ID=id)
+        db.session.add(model)
+        db.session.commit()
+        return redirect(url_for('index', id=id))
+
+@app.route('/edit3d', methods=['GET', 'POST'])
+@login_required
+def edit3d():
+    form = Edit3DPrintForm()
+    model = Models.query.filter_by(ID_Models=id).first()
+    if form.validate_on_submit():
+        model.Name = form.name.data
+        model.Status = form.status.data
+        model.Quality = form.quality.data
+        db.session.commit()
+        return redirect(url_for('index', id=id))
 
 @app.route('/logout')
 def logout():

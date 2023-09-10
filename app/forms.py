@@ -28,7 +28,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different username.')
 
 # Eigenentwicklung
-class New3DPrint(FlaskForm):
+class New3DPrintForm(FlaskForm):
     name = StringField('Filename', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
@@ -36,7 +36,7 @@ class New3DPrint(FlaskForm):
     submit = SubmitField('Submit')
 
 # Eigenentwicklung
-class Edit3DPrint(FlaskForm):
+class Edit3DPrintForm(FlaskForm):
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
     quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Update')
