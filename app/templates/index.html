@@ -31,10 +31,29 @@
             <td width="15%">
                 Quality
             </td>
-            {% for model in models %}
-            {% include '_model.html' %}
-            {% endfor %}
         </tr>
+        {% for model in models %}
+            <tr>
+                <td>
+                    {{model.Name}}
+                </td>
+                <td>
+                    {{model.Description}}
+                </td>
+                <td>
+                    {{model.Status}}
+                </td>
+                <td>
+                    {{model.Quality}}
+                </td>
+                <td>
+                    <a href="{{ url_for('edit', id=item.ID_ToDo) }}">Edit</a><br>
+                </td>
+                <td>
+                    <a href="{{ url_for('delete', id=item.ID_ToDo) }}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
     </table>
     
 {% endblock %}
