@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
-from app.models import User
+from app.models import Users
 
 # Übernommen aus den Beispielen
 class LoginForm(FlaskForm):
@@ -23,7 +23,7 @@ class RegistrationForm(FlaskForm):
 
     # Übernommen aus den Beispielen
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = Users.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
 
