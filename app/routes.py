@@ -1,29 +1,27 @@
-# Übernommen aus den Beispielen
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
-    EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import LoginForm, RegistrationForm, New3DPrint, ResetPasswordForm
 from app.models import User, Post
 from app.email import send_password_reset_email
 
-# Übernommen aus den Beispielen
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-# Übernommen aus den Beispielen
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    form = PostForm()
+    form = New3DPrint()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        post = Post(body=form.post.data, user=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
@@ -39,7 +37,7 @@ def index():
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
-# Übernommen aus den Beispielen
+
 @app.route('/explore')
 @login_required
 def explore():
@@ -53,7 +51,7 @@ def explore():
     return render_template('index.html', title='Explore', posts=posts.items,
                            next_url=next_url, prev_url=prev_url)
 
-# Übernommen aus den Beispielen
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -71,20 +69,20 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
-# Übernommen aus den Beispielen
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# Übernommen aus den Beispielen
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data)
+        user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -92,7 +90,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-# Übernommen aus den Beispielen
+
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
