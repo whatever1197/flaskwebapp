@@ -7,7 +7,7 @@
     {{ wtf.quick_form(form) }}
     <br>
     {% endif %}
-    {% for post in posts %}
-        {% include '_post.html' %}
+    {% for model in models %}
+        {% include '_model.html' %}
     {% endfor %}
 {% endblock %}
