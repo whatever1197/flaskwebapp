@@ -10,7 +10,6 @@ from app.models import Users
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
 # Übernommen aus den Beispielen
@@ -23,7 +22,7 @@ class RegistrationForm(FlaskForm):
 
     # Übernommen aus den Beispielen
     def validate_username(self, username):
-        user = Users.query.filter_by(username=username.data).first()
+        user = Users.query.filter_by(Username=username.data).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
 

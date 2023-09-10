@@ -29,6 +29,9 @@ class Users(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.Password, password)
     
+    def get_id(self):
+        return (self.ID_User)
+
     def all_models(self):
         models = Models.query.all()
         return models
@@ -72,10 +75,11 @@ class Users(UserMixin, db.Model):
 
 class Models(db.Model):
     ID_Model = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(64))
+    Name = db.Column(db.String(64), unique=True)
     Description = db.Column(db.String(1024))
     Status = db.Column(db.String(16))
     Quality = db.Column(db.String(16))
+    Timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     User_ID = db.Column(db.Integer, db.ForeignKey(Users.ID_User))
 
     def json_one(self):

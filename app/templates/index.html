@@ -2,10 +2,17 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+    <h1>Hello there!</h1>
+    <p>
+        Welcome on my 3D-Print Management Page.
+        Here you'll find my 3D-Prints (downloaded or created by myself) rated on their quality or in other words useability.
+    </p>
     {% if form %}
     {{ wtf.quick_form(form) }}
     <br>
+    {% endif %}
+    {% if current_user.is_anonymous %}
+    You have to login to edit.
     {% endif %}
     {% for model in models %}
         {% include '_model.html' %}
