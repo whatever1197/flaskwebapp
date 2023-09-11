@@ -1,3 +1,4 @@
+# Übernommen aus den Beispielen
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
@@ -6,14 +7,14 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, New3DPrintForm, Edit3DPrintForm
 from app.models import Users, Models
 
-
+# Übernommen aus den Beispielen
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    models = Models.query.order_by(Models.timestamp.desc())
+    models = Models.query.order_by(Models.Timestamp.desc())
     return render_template('index.html', title='Home', models=models)
 
-
+# Übernommen aus den Beispielen
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -28,13 +29,13 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
-
+# Übernommen aus den Beispielen
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-
+# Übernommen aus den Beispielen
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -49,7 +50,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-
+# Eigenentwicklung
 @app.route('/new3d', methods=['GET', 'POST'])
 @login_required
 def new3d():
@@ -62,6 +63,7 @@ def new3d():
 
     return render_template("new3d.html", title="New 3D-Model", form=form)
 
+# Eigenentwicklung
 @app.route('/edit3d/<id>', methods=['GET', 'POST'])
 @login_required
 def edit3d(id):
@@ -98,7 +100,7 @@ def generateapikey():
     Users.get_token(current_user)
     return redirect(url_for('api'))
 
-
+# Eigenentwicklung
 @app.route("/api", methods=['GET', 'POST'])
 @login_required
 def api():

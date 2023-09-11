@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+<!--Abgeleitet von Beispielen (Teilentwicklung)-->
 {% block app_content %}
-    <h2>Hello there!</h2>
+    <h3>Hello there!</h3>
     <p>
         Welcome on my 3D-Print Management page.
         Here you'll find my 3D-Prints (downloaded or created by myself) rated on their quality or in other words useability.
@@ -32,7 +33,7 @@
                 Quality
             </td>
         </tr>
-
+        <!--Abgeleitet von Beispielen (Teilentwicklung)-->
         {% for model in models %}
             <tr>
                 <td>

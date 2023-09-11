@@ -8,7 +8,7 @@ from hashlib import md5
 
 import os
 
-
+# Abgeleitet von Beispielen (Teilentwicklung)
 class Users(UserMixin, db.Model):
     ID_User = db.Column(db.Integer, primary_key=True)
     Username = db.Column(db.String(64), index=True, unique=True)
@@ -17,6 +17,7 @@ class Users(UserMixin, db.Model):
     API_Expiration = db.Column(db.DateTime)
     Models = db.relationship('Models', backref='User', lazy='dynamic')
 
+    # Übernommen aus den Beispielen
     @login.user_loader
     def load_user(id):
         return Users.query.get(int(id))
@@ -29,13 +30,16 @@ class Users(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.Password, password)
     
+    # Übernommen aus den Beispielen
     def get_id(self):
         return (self.ID_User)
 
+    # Übernommen aus den Beispielen
     def all_models(self):
         models = Models.query.all()
         return models
    
+    # Abgeleitet von Beispielen (Teilentwicklung)
     def json_one(self):
         returndata = {
             'ID_User': self.ID_User,
@@ -72,7 +76,7 @@ class Users(UserMixin, db.Model):
         return user
 
 
-
+# Abgeleitet von Beispielen (Teilentwicklung)
 class Models(db.Model):
     ID_Model = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(64), unique=True)
@@ -81,7 +85,8 @@ class Models(db.Model):
     Quality = db.Column(db.String(16))
     Timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     User_ID = db.Column(db.Integer, db.ForeignKey(Users.ID_User))
-
+    
+    # Abgeleitet von Beispielen (Teilentwicklung)
     def json_one(self):
         returndata = {
             'ID_Model': self.ID_Model,
@@ -95,6 +100,7 @@ class Models(db.Model):
 
         return(returndata)
 
+    # Abgeleitet von Beispielen (Teilentwicklung)
     def json_all():
         models = Models.query.all()
         returndata = {

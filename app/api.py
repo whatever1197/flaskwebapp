@@ -27,7 +27,7 @@ def get_models():
     data = Models.json_all()
     return jsonify(data)
 
-    # Eigenentwicklung
+# Eigenentwicklung
 @app.route('/api/user/<id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):

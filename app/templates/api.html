@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+<!--Eigenentwicklung-->
 {% block app_content %}
 <p>This app can be used by everyone who is in charge of a valid API-Key.</p>
+<br/>
+<p>
+    Current token: {{current_user.API_Token}}<br>
+    Expires in (UTC): {{current_user.API_Expiration}}
+</p>
+<a class="btn btn-default" href="{{ url_for('generateapikey') }}" role="button">Generate</a>
+{% endblock %}
 
 <table class="table table-hover">
     <tr>
@@ -18,9 +26,4 @@
         <td>Models: https://3dprint-mgmt.azurewebsites.net/api/models</td>
     </tr>
 </table>
-<p>
-    Current token: {{current_user.API_Token}}<br>
-    Expires in (UTC): {{current_user.API_Expiration}}
-</p>
-<a class="btn btn-default" href="{{ url_for('generateapikey') }}" role="button">Generate</a>
-{% endblock %}
+
