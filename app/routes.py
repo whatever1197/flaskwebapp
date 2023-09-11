@@ -11,7 +11,7 @@ from app.models import Users, Models
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    models = Models.query.order_by(Models.Timestamp.desc())
+    models = Models.query.all() #order_by(Models.Timestamp.desc())
     return render_template('index.html', title='Home', models=models)
 
 # Übernommen aus den Beispielen
