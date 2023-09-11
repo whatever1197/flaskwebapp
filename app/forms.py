@@ -30,7 +30,7 @@ class New3DPrintForm(FlaskForm):
     name = StringField('Filename', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
-    quality = SelectField('Printquality', choices=[('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
+    quality = SelectField('Printquality', choices=[('-','-'),('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     # Übernommen aus den Beispielen
@@ -45,5 +45,5 @@ class Edit3DPrintForm(FlaskForm):
     name = StringField('Filename', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     status = SelectField('Status', choices=[('Printed','Printed'),('Not printed','Not printed')], validators=[DataRequired()])
-    quality = SelectField('Printquality', choices=[('none','none'),('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
+    quality = SelectField('Printquality', choices=[('-','-'),('Fabulous','Fabulous'),('Good','Good'),('Meh','Meh'),('Bad','Bad')], validators=[DataRequired()])
     submit = SubmitField('Update')
