@@ -10,8 +10,7 @@
     Expires in (UTC): {{current_user.API_Expiration}}
 </p>
 <a class="btn btn-default" href="{{ url_for('generateapikey') }}" role="button">Generate</a>
-{% endblock %}
-
+<br/>
 <table class="table table-hover">
     <tr>
         <td>User: https://3dprint-mgmt.azurewebsites.net/api/user/ID</td>
@@ -27,3 +26,4 @@
     </tr>
 </table>
 
+{% endblock %}
